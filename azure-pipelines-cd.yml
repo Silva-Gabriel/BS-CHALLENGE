@@ -4,7 +4,7 @@ trigger:
       - main          # CD roda quando tem merge na main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'MySelfHostedPool'
 
 variables:
   buildConfiguration: 'Release'
