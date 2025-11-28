@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "api\\bin\\Release\\net8.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/b5a5fb85-e1be-4cc8-8916-ebdec424dd2a/resourceGroups/bs-challenge/providers/Microsoft.Web/sites/bs-tech"
+}
