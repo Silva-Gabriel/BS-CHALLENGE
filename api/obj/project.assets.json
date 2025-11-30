@@ -107,6 +107,36 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/application.dll": {}
+        }
+      },
+      "crosscutting/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/crosscutting.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/crosscutting.dll": {}
+        }
+      },
+      "domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/domain.dll": {}
+        }
       }
     }
   },
@@ -473,12 +503,30 @@
         "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "application/1.0.0": {
+      "type": "project",
+      "path": "../application/application.csproj",
+      "msbuildProject": "../application/application.csproj"
+    },
+    "crosscutting/1.0.0": {
+      "type": "project",
+      "path": "../crosscutting/crosscutting.csproj",
+      "msbuildProject": "../crosscutting/crosscutting.csproj"
+    },
+    "domain/1.0.0": {
+      "type": "project",
+      "path": "../domain/domain.csproj",
+      "msbuildProject": "../domain/domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.AspNetCore.OpenApi >= 8.0.12",
-      "Swashbuckle.AspNetCore >= 6.6.2"
+      "Swashbuckle.AspNetCore >= 6.6.2",
+      "application >= 1.0.0",
+      "crosscutting >= 1.0.0",
+      "domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -487,11 +535,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\api.csproj",
+      "projectUniqueName": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\api.csproj",
+      "projectPath": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\api.csproj",
       "packagesPath": "C:\\Users\\potte\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\obj\\",
+      "outputPath": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\potte\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -505,7 +553,17 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\application\\application.csproj": {
+              "projectPath": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\application\\application.csproj"
+            },
+            "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\crosscutting\\crosscutting.csproj": {
+              "projectPath": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\crosscutting\\crosscutting.csproj"
+            },
+            "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\domain\\domain.csproj": {
+              "projectPath": "c:\\Users\\potte\\OneDrive\\Área de Trabalho\\Code\\C#\\BS-CHALLENGE\\domain\\domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
