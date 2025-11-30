@@ -5,7 +5,7 @@ trigger:
       # - feature/*   # se quiser rodar nas features também
 
 pool:
-  vmImage: 'default'
+  vmImage: 'Default'
 
 variables:
   buildConfiguration: 'Release'
