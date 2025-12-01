@@ -11,6 +11,7 @@
           "MediatR": "12.5.0",
           "Microsoft.AspNetCore.Mvc": "2.3.0",
           "Swashbuckle.AspNetCore": "6.6.2",
+          "Swashbuckle.AspNetCore.Annotations": "6.6.2",
           "application": "1.0.0",
           "crosscutting": "1.0.0",
           "domain": "1.0.0"
@@ -973,6 +974,17 @@
           "Swashbuckle.AspNetCore.SwaggerUI": "6.6.2"
         }
       },
+      "Swashbuckle.AspNetCore.Annotations/6.6.2": {
+        "dependencies": {
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.6.2"
+        },
+        "runtime": {
+          "lib/net8.0/Swashbuckle.AspNetCore.Annotations.dll": {
+            "assemblyVersion": "6.6.2.0",
+            "fileVersion": "6.6.2.401"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore.Swagger/6.6.2": {
         "dependencies": {
           "Microsoft.OpenApi": "1.6.14"
@@ -1766,9 +1778,7 @@
       },
       "application/1.0.0": {
         "dependencies": {
-          "BCrypt.Net-Next": "4.0.3",
           "MediatR": "12.5.0",
-          "Microsoft.Extensions.Configuration": "9.0.4",
           "Microsoft.Extensions.Logging": "9.0.4",
           "domain": "1.0.0",
           "infrastructure": "1.0.0"
@@ -1807,7 +1817,10 @@
       },
       "infrastructure/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
           "Dapper": "2.1.66",
+          "Microsoft.Data.SqlClient": "5.1.0",
+          "Microsoft.Extensions.Configuration": "9.0.4",
           "Microsoft.Extensions.Logging": "9.0.4",
           "domain": "1.0.0"
         },
@@ -2602,6 +2615,13 @@
       "sha512": "sha512-+NB4UYVYN6AhDSjW0IJAd1AGD8V33gemFNLPaxKTtPkHB+HaKAKf9MGAEUPivEWvqeQfcKIw8lJaHq6LHljRuw==",
       "path": "swashbuckle.aspnetcore/6.6.2",
       "hashPath": "swashbuckle.aspnetcore.6.6.2.nupkg.sha512"
+    },
+    "Swashbuckle.AspNetCore.Annotations/6.6.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-itEYQwWam7FT/8qUEMmC+BDt38J4w52NDod9yUeWpIKA7pM1xo+FbGSjXR6Q9oLOTT1PiJ+zYVf5Ij6pVX99tw==",
+      "path": "swashbuckle.aspnetcore.annotations/6.6.2",
+      "hashPath": "swashbuckle.aspnetcore.annotations.6.6.2.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore.Swagger/6.6.2": {
       "type": "package",

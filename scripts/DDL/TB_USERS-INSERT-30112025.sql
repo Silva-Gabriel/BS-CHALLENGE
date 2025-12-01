@@ -1,16 +1,54 @@
--- Tabela de grupos de acesso
+------------------------------------------------------------
+-- 1. Tabela de grupos de acesso
+------------------------------------------------------------
 CREATE TABLE TB_ACCESS_GROUP (
     ID INT PRIMARY KEY,
     NAME VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Tabela de usuários
+------------------------------------------------------------
+-- 2. Tabela de gêneros
+------------------------------------------------------------
+CREATE TABLE TB_GENDER (
+    ID INT PRIMARY KEY,
+    CODE VARCHAR(20) NOT NULL UNIQUE,   -- chave de sistema: 'MALE', 'FEMALE', etc.
+    DESCRIPTION NVARCHAR(100) NOT NULL  -- descrição para exibição
+);
+
+------------------------------------------------------------
+-- 3. Tabela de pessoas
+------------------------------------------------------------
+CREATE TABLE TB_PERSON (
+    ID INT IDENTITY(1,1),
+    FULL_NAME NVARCHAR(255) NOT NULL,
+    DOCUMENT_NUMBER VARCHAR(20) NULL,
+    BIRTH_DATE DATE NULL,
+    GENDER_ID INT NULL,                         -- FK para TB_GENDER
+    CREATED_AT DATETIME NOT NULL DEFAULT GETDATE(),
+    UPDATED_AT DATETIME NULL
+);
+
+ALTER TABLE TB_PERSON
+ADD CONSTRAINT PK_TB_PERSON_ID PRIMARY KEY (ID);
+
+ALTER TABLE TB_PERSON
+ADD CONSTRAINT UQ_TB_PERSON_DOCUMENT UNIQUE (DOCUMENT_NUMBER);
+
+ALTER TABLE TB_PERSON
+ADD CONSTRAINT FK_TB_PERSON_GENDER
+    FOREIGN KEY (GENDER_ID)
+    REFERENCES TB_GENDER(ID);
+
+------------------------------------------------------------
+-- 4. Tabela de usuários
+------------------------------------------------------------
 CREATE TABLE TB_USERS (
     ID INT IDENTITY(1,1),
     USERNAME NVARCHAR(255) NOT NULL,
     PASSWORD_HASH NVARCHAR(255) NOT NULL,
     ACTIVE CHAR(1) DEFAULT '1',
     ACCESS_GROUP INT NOT NULL,
+    PERSON_ID INT NULL,
     CREATED_AT DATETIME DEFAULT GETDATE() NOT NULL,
     UPDATED_AT DATETIME DEFAULT NULL
 );
@@ -22,5 +60,62 @@ ALTER TABLE TB_USERS
 ADD CONSTRAINT UQ_TB_USERS_USERNAME UNIQUE (USERNAME);
 
 ALTER TABLE TB_USERS
-ADD CONSTRAINT FK_TB_USERS_ACCESS_GROUP FOREIGN KEY (ACCESS_GROUP)
-REFERENCES TB_ACCESS_GROUP(ID);
+ADD CONSTRAINT FK_TB_USERS_ACCESS_GROUP
+    FOREIGN KEY (ACCESS_GROUP)
+    REFERENCES TB_ACCESS_GROUP(ID);
+
+ALTER TABLE TB_USERS
+ADD CONSTRAINT FK_TB_USERS_PERSON
+    FOREIGN KEY (PERSON_ID)
+    REFERENCES TB_PERSON(ID);
+
+------------------------------------------------------------
+-- 5. Tabela de contatos da pessoa
+------------------------------------------------------------
+CREATE TABLE TB_PERSON_CONTACT (
+    ID INT IDENTITY(1,1),
+    PERSON_ID INT NOT NULL,
+    TYPE VARCHAR(20) NOT NULL,               -- 'EMAIL', 'MOBILE', 'PHONE', etc.
+    VALUE NVARCHAR(255) NOT NULL,            -- e-mail, número, etc.
+    IS_PRIMARY BIT NOT NULL DEFAULT 0,
+    CREATED_AT DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+ALTER TABLE TB_PERSON_CONTACT
+ADD CONSTRAINT PK_TB_PERSON_CONTACT_ID PRIMARY KEY (ID);
+
+ALTER TABLE TB_PERSON_CONTACT
+ADD CONSTRAINT FK_TB_PERSON_CONTACT_PERSON
+    FOREIGN KEY (PERSON_ID)
+    REFERENCES TB_PERSON(ID);
+
+ALTER TABLE TB_PERSON_CONTACT
+ADD CONSTRAINT UQ_TB_PERSON_CONTACT_PRIMARY
+    UNIQUE (PERSON_ID, TYPE, IS_PRIMARY);
+    -- Garante no máx. 1 contato primário por pessoa + tipo
+
+------------------------------------------------------------
+-- 6. Tabela de endereços da pessoa
+------------------------------------------------------------
+CREATE TABLE TB_PERSON_ADDRESS (
+    ID INT IDENTITY(1,1),
+    PERSON_ID INT NOT NULL,
+    STREET NVARCHAR(255) NOT NULL,
+    NUMBER NVARCHAR(20) NULL,
+    COMPLEMENT NVARCHAR(100) NULL,
+    NEIGHBORHOOD NVARCHAR(100) NULL,
+    CITY NVARCHAR(100) NOT NULL,
+    STATE NVARCHAR(50) NOT NULL,
+    COUNTRY NVARCHAR(100) NOT NULL DEFAULT 'Brasil',
+    ZIP_CODE NVARCHAR(20) NULL,
+    IS_PRIMARY BIT NOT NULL DEFAULT 0,
+    CREATED_AT DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+ALTER TABLE TB_PERSON_ADDRESS
+ADD CONSTRAINT PK_TB_PERSON_ADDRESS_ID PRIMARY KEY (ID);
+
+ALTER TABLE TB_PERSON_ADDRESS
+ADD CONSTRAINT FK_TB_PERSON_ADDRESS_PERSON
+    FOREIGN KEY (PERSON_ID)
+    REFERENCES TB_PERSON(ID);

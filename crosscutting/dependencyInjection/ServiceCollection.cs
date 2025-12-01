@@ -1,14 +1,12 @@
 using System.Data;
 using System.Reflection;
-using System.Text;
 using domain.interfaces;
+using domain.interfaces.repository.read;
 using infra.repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
+using infrastructure.repository.read;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 namespace crosscutting.dependencyInjection
 {
     public static class ServiceCollection
@@ -19,6 +17,7 @@ namespace crosscutting.dependencyInjection
                 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
             services.AddScoped<IUserWriteRepository, UserWriteRepository>();
+            services.AddScoped<IUserReadRepository, UserReadRepository>();
 
             var connectionString =
                 configuration["DB_CONNECTION_STRING"]

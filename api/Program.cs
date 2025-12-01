@@ -1,19 +1,46 @@
+using System;
+using System.IO;
 using crosscutting.dependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Logging.AddDefaultLogging();
 
+builder.Services.AddSwaggerGen(options =>
+{
+    // Info principal
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Register Users API",
+        Version = "v1",
+        Description = "API para registro de usuários",
+        Contact = new OpenApiContact
+        {
+            Name = "Gabriel Santana",
+            Email = "pottegryff8@gmail.com"
+        }
+    });
+
+    options.EnableAnnotations();
+
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+});
+
 var app = builder.Build();
 
-// Em produção, use um handler global de erro
+// Handler global de erro para exibir no Azure
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler(errorApp =>

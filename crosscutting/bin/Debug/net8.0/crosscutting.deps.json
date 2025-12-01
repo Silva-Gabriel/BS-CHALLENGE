@@ -549,9 +549,7 @@
       },
       "application/1.0.0": {
         "dependencies": {
-          "BCrypt.Net-Next": "4.0.3",
           "MediatR": "12.5.0",
-          "Microsoft.Extensions.Configuration": "9.0.4",
           "Microsoft.Extensions.Logging": "9.0.4",
           "domain": "1.0.0",
           "infrastructure": "1.0.0"
@@ -573,7 +571,10 @@
       },
       "infrastructure/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.0.3",
           "Dapper": "2.1.66",
+          "Microsoft.Data.SqlClient": "5.1.0",
+          "Microsoft.Extensions.Configuration": "9.0.4",
           "Microsoft.Extensions.Logging": "9.0.4",
           "domain": "1.0.0"
         },
