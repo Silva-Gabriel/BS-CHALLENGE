@@ -6,7 +6,7 @@
     "configurations": [
         
         {
-            "name": "Register API",
+            "name": "USERS API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
