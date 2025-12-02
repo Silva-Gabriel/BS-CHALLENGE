@@ -26,8 +26,10 @@ namespace infrastructure.repository.read
 
             query.Append(@$"
                 SELECT 
-                    USERNAME {nameof(UserDTO.Username)}
-                FROM TB_USERS");
+                    u.USERNAME AS {nameof(UserDTO.Username)},
+                    p.ACTIVE AS {nameof(UserDTO.Status)}
+                FROM TB_USERS u
+                INNER JOIN TB_PERSON p ON p.ID = u.PERSON_ID");
 
             BuildParamsQuery(param, query, parameters);
 
@@ -49,6 +51,21 @@ namespace infrastructure.repository.read
             {
                 query.Append(" WHERE USERNAME LIKE @username ");
                 parameters.Add("username", $"%{param.Username}%", DbType.String);
+            }
+
+            if (param.Status != null)
+            {
+                if (query.ToString().Contains("WHERE"))
+                {
+                    query.Append(" AND ");
+                }
+                else
+                {
+                    query.Append(" WHERE ");
+                }
+
+                query.Append(" ACTIVE = @status ");
+                parameters.Add("status", param.Status == domain.enums.ClientStatus.ACTIVE ? 1 : 0, DbType.Int32);
             }
         }
 

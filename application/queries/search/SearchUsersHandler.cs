@@ -15,7 +15,8 @@ namespace application.queries.search
         {
             var param = new domain.parameters.SearchUsersParameter
             {
-                Username = request.Username
+                Username = request?.Username ?? string.Empty,
+                Status = request?.Status
             };
 
             var users = await UserReadRepository.SearchUsersAsync(param);
