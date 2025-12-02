@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using appication.commands.create;
 using application.queries.search;
+using domain.enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -31,10 +33,11 @@ namespace api.src.controllers
         {
             var result = await Mediator.Send(request);
 
-            return Created($"v1/api/register/{result.Id}", result);
+            return Created($"v1/api/user/{result.Id}", result);
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{nameof(Role.ADMIN)},{nameof(Role.MANAGER)}")]
         [SwaggerOperation(
             Summary = "Listar todos os registros de usuários",
             Description = "Retorna uma lista de todos os registros de usuários ativos e inativos.")]

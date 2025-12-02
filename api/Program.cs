@@ -9,21 +9,21 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+AppContext.SetSwitch("Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Logging.AddDefaultLogging();
-
 builder.Services.AddSwaggerGen(options =>
 {
-    // Info principal
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Register Users API",
+        Title = "USERS API",
         Version = "v1",
-        Description = "API para registro de usuários",
+        Description = "API para gerenciamento de usuários.",
         Contact = new OpenApiContact
         {
             Name = "Gabriel Santana",
@@ -36,6 +36,26 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\nEnter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 var app = builder.Build();
@@ -60,7 +80,18 @@ if (!app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
+    {
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync("{\"error\": \"Acesso negado. Você não tem permissão para acessar este recurso.\"}");
+    }
+});
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
