@@ -24,17 +24,18 @@ INSERT INTO TB_ACCESS_GROUP (ID, NAME)
 VALUES 
     (1, 'ADMIN'),
     (2, 'USER'),
-    (3, 'MANAGER');
+    (3, 'MANAGER'),
+    (4, 'GUEST');
 
-INSERT INTO TB_PERSON (FULL_NAME, DOCUMENT_NUMBER, BIRTH_DATE, GENDER_ID)
+INSERT INTO TB_PERSON (FULL_NAME, DOCUMENT_NUMBER, BIRTH_DATE, GENDER_ID, ACTIVE)
 VALUES
-    ('Gabriel Santana', '12345678901', '2000-07-08', 1),
-    ('Maria Oliveira',   '98765432100', '1995-08-20', 2);
+    ('Gabriel Santana', '12345678901', '2000-07-08', 1, 1),
+        ('Maria Oliveira', '98765432100', '1995-08-20', 2, 1);
 
-INSERT INTO TB_USERS (USERNAME, PASSWORD_HASH, ACTIVE, ACCESS_GROUP, PERSON_ID)
+INSERT INTO TB_USERS (USERNAME, PASSWORD_HASH, ACCESS_GROUP, PERSON_ID)
 VALUES
-    ('gabriel.santana', '$2y$10$BTWilSQs2ytMoTORykDi9e2hQJ0wm.swJa8zls32KemvUuoKcG0FS', '1', 1, 1), -- admin123
-    ('maria.oliveira',  '$2y$10$RiSoDDjdVWcoy12kh0A08e9vAd7ULqgkgFITFStzyz7J0lNDKi/r6',  '1', 2, 2);  -- teste123
+    ('gabriel.santana', '$2y$10$BTWilSQs2ytMoTORykDi9e2hQJ0wm.swJa8zls32KemvUuoKcG0FS', '1', 1), -- admin123
+    ('maria.oliveira',  '$2y$10$RiSoDDjdVWcoy12kh0A08e9vAd7ULqgkgFITFStzyz7J0lNDKi/r6',  '1', 2);  -- teste123
 
 -- Contatos do Gabriel (ID = 1)
 INSERT INTO TB_PERSON_CONTACT (PERSON_ID, TYPE, VALUE, IS_PRIMARY)

@@ -12,17 +12,19 @@ namespace infra.repository
     {
         private ILogger<UserWriteRepository> Logger { get; }
         private IConfiguration Configuration { get; }
+        private IDbConnection Connection { get; }
 
-        public UserWriteRepository(ILogger<UserWriteRepository> logger, IConfiguration configuration)
+        public UserWriteRepository(ILogger<UserWriteRepository> logger, IConfiguration configuration, IDbConnection connection)
         {
             Logger = logger;
             Configuration = configuration;
+            Connection = connection;
         }
 
-        public async Task<long> InsertPersonalInfoAsync(PersonalInfo personalInfo, DateTime createdAt, IDbConnection connection,IDbTransaction transaction, CancellationToken cancellationToken)
+        public async Task<long> InsertPersonalInfoAsync(PersonalInfo personalInfo, DateTime createdAt, IDbConnection connection, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var parameters = new DynamicParameters();
-            
+
             parameters.Add("fullName", personalInfo.FullName, DbType.String);
             parameters.Add("documentNumber", personalInfo.DocumentNumber, DbType.String);
             parameters.Add("birthDate", personalInfo.BirthDate, DbType.DateTime);
@@ -43,7 +45,7 @@ namespace infra.repository
                 {
                     Logger.LogError($"[{GetType().Name}] Error inserting personal info for documentNumber: {personalInfo.DocumentNumber}");
                     return -1;
-                }   
+                }
 
                 return personId;
             }
@@ -82,7 +84,7 @@ namespace infra.repository
                 {
                     Logger.LogError($"[{GetType().Name}] Error inserting user for personId: {personId}");
                     return -1;
-                }   
+                }
 
                 return userId;
             }
@@ -130,7 +132,7 @@ namespace infra.repository
 
             return sucessResponse;
         }
-        
+
         public async Task<bool> InsertContactsAsync(IEnumerable<Contact> contacts, long personId, DateTime createdAt, IDbConnection connection, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var sucessResponse = false;
@@ -160,5 +162,31 @@ namespace infra.repository
 
             return sucessResponse;
         }
+
+        public async Task<bool> DeletePersonAsync(long personId, CancellationToken cancellationToken)
+        {
+            const string sql = @"
+                UPDATE TB_PERSON
+                SET ACTIVE = 0, UPDATED_AT = @updatedAt
+                WHERE ID = @personId;
+            ";
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("personId", personId, DbType.Int32);
+            parameters.Add("updatedAt", DateTime.UtcNow, DbType.DateTime);
+
+            var sucessResponse = await Connection.ExecuteAsync(sql, parameters) > 0;
+
+            if (!sucessResponse)
+            {
+                Logger.LogError($"[{GetType().Name}] Error deleting user for personId: {personId}");
+                return false;
+            }
+
+            return sucessResponse;
+        }
+
+        
     }
 }

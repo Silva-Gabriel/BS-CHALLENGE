@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using appication.commands.create;
+using application.commands.delete;
 using application.queries.search;
 using domain.enums;
 using MediatR;
@@ -47,6 +48,20 @@ namespace api.src.controllers
             var result = await Mediator.Send(request);
 
             return Ok(result);
+        }
+
+        [HttpDelete("{userId}")]
+        [Authorize(Roles = nameof(Role.MANAGER))]
+        [SwaggerOperation(
+            Summary = "Deletar logicamente um registro de usuário",
+            Description = "Deleta logicamente um registro de usuário pelo ID da pessoa.")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(long userId)
+        {
+            await Mediator.Send(new DeleteUserRequest { UserId = userId });
+
+            return NoContent();
         }
     }
 }

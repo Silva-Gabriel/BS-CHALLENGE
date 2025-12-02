@@ -51,5 +51,19 @@ namespace infrastructure.repository.read
                 parameters.Add("username", $"%{param.Username}%", DbType.String);
             }
         }
+
+        public Task<bool> ExistsByIdAsync(long personId, CancellationToken cancellationToken)
+        {
+            const string sql = @"
+                SELECT COUNT(1)
+                FROM TB_PERSON
+                WHERE ID = @personId AND ACTIVE = 1;
+            ";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("personId", personId, DbType.Int64);
+
+            return Connection.ExecuteScalarAsync<bool>(sql, parameters);
+        }
     }
 }
