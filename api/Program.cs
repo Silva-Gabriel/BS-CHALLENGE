@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.Json.Serialization;
 using crosscutting.dependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -14,7 +15,10 @@ AppContext.SetSwitch("Microsoft.IdentityModel.Logging.IdentityModelEventSource.S
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Logging.AddDefaultLogging();
 builder.Services.AddSwaggerGen(options =>
